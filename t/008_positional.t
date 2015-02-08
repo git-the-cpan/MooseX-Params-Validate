@@ -1,5 +1,4 @@
-#!/usr/bin/perl
-
+## no critic (Moose::RequireCleanNamespace, Modules::ProhibitMultiplePackages, Moose::RequireMakeImmutable)
 use strict;
 use warnings;
 
@@ -45,8 +44,7 @@ use Test::Fatal;
         my $self = shift;
         return [
             pos_validated_list(
-                \@_,
-                {
+                \@_, {
                     isa => subtype( 'Object' => where { $_->isa('Foo') } ),
                     optional => 1
                 },
@@ -113,7 +111,7 @@ like(
     '... the third param in &baz must be do Roles::Blah'
 );
 like(
-    exception { $foo->baz( $foo, $foo, "foo" ) },
+    exception { $foo->baz( $foo, $foo, 'foo' ) },
     qr/\QParameter #3/,
     '... the third param in &baz must be do Roles::Blah'
 );

@@ -1,5 +1,4 @@
-#!/usr/bin/perl
-
+## no critic (Moose::RequireCleanNamespace, Modules::ProhibitMultiplePackages, Moose::RequireMakeImmutable)
 use strict;
 use warnings;
 
@@ -8,25 +7,23 @@ use Test::Fatal;
 
 use MooseX::Params::Validate qw( validated_hash );
 
-{
-    sub foo {
-        my %params = validated_hash(
-            \@_,
-            x => { isa => 'Int' },
-            y => { isa => 'Int' },
-        );
-        \%params;
-    }
+sub foo {
+    my %params = validated_hash(
+        \@_,
+        x => { isa => 'Int' },
+        y => { isa => 'Int' },
+    );
+    \%params;
+}
 
-    sub bar {
-        my %params = validated_hash(
-            \@_,
-            x                              => { isa => 'Int' },
-            y                              => { isa => 'Int' },
-            MX_PARAMS_VALIDATE_ALLOW_EXTRA => 1,
-        );
-        \%params;
-    }
+sub bar {
+    my %params = validated_hash(
+        \@_,
+        x                              => { isa => 'Int' },
+        y                              => { isa => 'Int' },
+        MX_PARAMS_VALIDATE_ALLOW_EXTRA => 1,
+    );
+    \%params;
 }
 
 is_deeply(

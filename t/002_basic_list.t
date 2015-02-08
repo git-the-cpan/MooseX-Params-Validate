@@ -1,5 +1,4 @@
-#!/usr/bin/perl
-
+## no critic (Moose::RequireCleanNamespace, Modules::ProhibitMultiplePackages, Moose::RequireMakeImmutable)
 use strict;
 use warnings;
 
@@ -74,7 +73,7 @@ like(
     '... the foo param in &baz must be a Foo instance'
 );
 like(
-    exception { $foo->baz( foo => "foo" ) },
+    exception { $foo->baz( foo => 'foo' ) },
     qr/\QThe 'foo' parameter/,
     '... the foo param in &baz must be a Foo instance'
 );
@@ -92,7 +91,7 @@ like(
     '... the bar param in &baz must be do Roles::Blah'
 );
 like(
-    exception { $foo->baz( bar => "foo" ) },
+    exception { $foo->baz( bar => 'foo' ) },
     qr/\QThe 'bar' parameter/,
     '... the bar param in &baz must be do Roles::Blah'
 );
@@ -110,7 +109,7 @@ like(
     '... the boo param in &baz must be do Roles::Blah'
 );
 like(
-    exception { $foo->baz( boo => "foo" ) },
+    exception { $foo->baz( boo => 'foo' ) },
     qr/\QThe 'boo' parameter/,
     '... the boo param in &baz must be do Roles::Blah'
 );
@@ -131,7 +130,7 @@ like(
     '... the foo param in &bar must be a Foo instance'
 );
 like(
-    exception { $foo->bar( foo => "foo" ) },
+    exception { $foo->bar( foo => 'foo' ) },
     qr/\QThe 'foo' parameter/,
     '... the foo param in &bar must be a Foo instance'
 );
@@ -142,7 +141,8 @@ like(
 );
 like(
     exception { $foo->bar( baz => [] ) },
-    qr/\QMandatory parameter 'foo'/
+    qr/\QMandatory parameter 'foo'/,
+    '.. the foo param is mandatory'
 );
 
 is_deeply(
@@ -178,8 +178,10 @@ like(
     qr/\QThe 'baz' parameter/,
     '... baz requires a ArrayRef | HashRef'
 );
+
+my $var = 42;
 like(
-    exception { $foo->bar( foo => $foo, baz => \( my $var ) ) },
+    exception { $foo->bar( foo => $foo, baz => $var ) },
     qr/\QThe 'baz' parameter/, '... baz requires a ArrayRef | HashRef'
 );
 

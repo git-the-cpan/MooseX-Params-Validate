@@ -1,9 +1,10 @@
+## no critic (Moose::RequireCleanNamespace, Moose::RequireMakeImmutable)
 package MooseX::Params::Validate;
-# git description: v0.19-5-g4255f1b
 
-$MooseX::Params::Validate::VERSION = '0.20'; # TRIAL
 use strict;
 use warnings;
+
+our $VERSION = '0.21';
 
 use Carp 'confess';
 use Devel::Caller 'caller_cv';
@@ -39,7 +40,7 @@ sub validated_hash {
         ( ref $CACHED_SPECS{$cache_key} eq 'HASH' )
             || confess
             "I was expecting a HASH-ref in the cached $cache_key parameter"
-            . " spec, you are doing something funky, stop it!";
+            . ' spec, you are doing something funky, stop it!';
         %spec = %{ $CACHED_SPECS{$cache_key} };
     }
     else {
@@ -47,7 +48,7 @@ sub validated_hash {
 
         $spec{$_} = _convert_to_param_validate_spec(
             $spec{$_},
-            "The '$_' parameter",
+            qq{The '$_' parameter},
         ) foreach keys %spec;
 
         $CACHED_SPECS{$cache_key} = \%spec
@@ -91,7 +92,7 @@ sub validated_list {
         ( ref $CACHED_SPECS{$cache_key} eq 'ARRAY' )
             || confess
             "I was expecting a ARRAY-ref in the cached $cache_key parameter"
-            . " spec, you are doing something funky, stop it!";
+            . ' spec, you are doing something funky, stop it!';
         %spec         = %{ $CACHED_SPECS{$cache_key}->[0] };
         @ordered_spec = @{ $CACHED_SPECS{$cache_key}->[1] };
     }
@@ -102,7 +103,7 @@ sub validated_list {
 
         $spec{$_} = _convert_to_param_validate_spec(
             $spec{$_},
-            "The '$_' parameter",
+            qq{The '$_' parameter},
         ) foreach keys %spec;
 
         $CACHED_SPECS{$cache_key} = [ \%spec, \@ordered_spec ]
@@ -152,7 +153,7 @@ sub pos_validated_list {
         ( ref $CACHED_SPECS{$cache_key} eq 'ARRAY' )
             || confess
             "I was expecting an ARRAY-ref in the cached $cache_key parameter"
-            . " spec, you are doing something funky, stop it!";
+            . ' spec, you are doing something funky, stop it!';
         @pv_spec = @{ $CACHED_SPECS{$cache_key} };
     }
     else {
@@ -215,15 +216,14 @@ sub _convert_to_param_validate_spec {
 
     my $constraint;
     if ( defined $spec->{isa} ) {
-        $constraint
-             = _is_tc( $spec->{isa} )
+        $constraint = _is_tc( $spec->{isa} )
             || Moose::Util::TypeConstraints::find_or_parse_type_constraint(
             $spec->{isa} )
             || class_type( $spec->{isa} );
     }
     elsif ( defined $spec->{does} ) {
         $constraint
-            = _is_tc( $spec->{isa} )
+            = _is_tc( $spec->{does} )
             || find_type_constraint( $spec->{does} )
             || role_type( $spec->{does} );
     }
@@ -236,11 +236,13 @@ sub _convert_to_param_validate_spec {
 
         my $cb = sub {
             return 1 if $constraint->check( $_[0] );
-            die MooseX::Params::Validate::Exception::ValidationFailedForTypeConstraint->new(
+            die
+                MooseX::Params::Validate::Exception::ValidationFailedForTypeConstraint
+                ->new(
                 parameter => $id,
                 type      => $constraint,
                 value     => $_[0],
-            );
+                );
         };
 
         $pv_spec{callbacks}
@@ -258,8 +260,8 @@ sub _is_tc {
 
     return $maybe_tc
         if defined $maybe_tc
-            && blessed $maybe_tc
-            && $maybe_tc->isa('Moose::Meta::TypeConstraint');
+        && blessed $maybe_tc
+        && $maybe_tc->isa('Moose::Meta::TypeConstraint');
 }
 
 sub _caller_name {
@@ -267,6 +269,8 @@ sub _caller_name {
 
     return ( caller( 2 + $depth ) )[3];
 }
+
+no Moose::Util::TypeConstraints;
 
 1;
 
@@ -282,7 +286,7 @@ MooseX::Params::Validate - an extension of Params::Validate using Moose's types
 
 =head1 VERSION
 
-version 0.20
+version 0.21
 
 =head1 SYNOPSIS
 
@@ -543,7 +547,7 @@ email at bug-moosex-params-validate@rt.cpan.org.
 
 =item *
 
-Stevan Little <stevan.little@iinteractive.com>
+Stevan Little <stevan@cpan.org>
 
 =item *
 
@@ -573,7 +577,7 @@ Karen Etheridge <ether@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 - 2015 by Stevan Little <stevan.little@iinteractive.com>.
+This software is copyright (c) 2013 - 2015 by Stevan Little <stevan@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

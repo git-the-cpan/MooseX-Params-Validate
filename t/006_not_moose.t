@@ -1,10 +1,10 @@
-#!/usr/bin/perl
-
+## no critic (Moose::RequireCleanNamespace, Modules::ProhibitMultiplePackages, Moose::RequireMakeImmutable)
 use strict;
 use warnings;
 
 use Test::More;
 
+## no critic (BuiltinFunctions::ProhibitStringyEval, ErrorHandling::RequireCheckingReturnValueOfEval)
 eval <<'EOF';
 {
     package Foo;
@@ -13,7 +13,8 @@ eval <<'EOF';
 EOF
 
 is(
-    $@, '',
+    $@,
+    q{},
     'loading MX::Params::Validate in a non-Moose class does not blow up'
 );
 ok(

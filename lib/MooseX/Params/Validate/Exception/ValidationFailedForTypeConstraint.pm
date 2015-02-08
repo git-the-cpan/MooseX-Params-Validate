@@ -1,7 +1,9 @@
 package MooseX::Params::Validate::Exception::ValidationFailedForTypeConstraint;
-$MooseX::Params::Validate::Exception::ValidationFailedForTypeConstraint::VERSION = '0.20'; # TRIAL
+
 use strict;
 use warnings;
+
+our $VERSION = '0.21';
 
 use Moose;
 use Moose::Util::TypeConstraints qw( duck_type );
@@ -23,7 +25,7 @@ has value => (
 has type => (
     is       => 'ro',
     isa      => duck_type( [qw( get_message name )] ),
-    required => 1
+    required => 1,
 );
 
 sub _build_message {
@@ -34,6 +36,9 @@ sub _build_message {
         . ' does not pass the type constraint because: '
         . $self->type()->get_message( $self->value() );
 }
+
+no Moose;
+no Moose::Util::TypeConstraints;
 
 __PACKAGE__->meta()->make_immutable();
 
@@ -51,7 +56,7 @@ MooseX::Params::Validate::Exception::ValidationFailedForTypeConstraint - Excepti
 
 =head1 VERSION
 
-version 0.20
+version 0.21
 
 =head1 SYNOPSIS
 
@@ -104,7 +109,7 @@ This object stringifies to a reasonable error message.
 
 =item *
 
-Stevan Little <stevan.little@iinteractive.com>
+Stevan Little <stevan@cpan.org>
 
 =item *
 
@@ -114,7 +119,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 - 2015 by Stevan Little <stevan.little@iinteractive.com>.
+This software is copyright (c) 2013 - 2015 by Stevan Little <stevan@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

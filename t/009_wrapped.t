@@ -1,5 +1,4 @@
-#!/usr/bin/perl
-
+## no critic (Moose::RequireCleanNamespace, Modules::ProhibitMultiplePackages, Moose::RequireMakeImmutable)
 use strict;
 use warnings;
 
@@ -32,7 +31,7 @@ use Test::Fatal;
             bar => { isa => 'Str' },
         );
 
-        $params{bar}, $self->$orig(%p);
+        return ( $params{bar}, $self->$orig(%p) );
     };
 
     around 'foo' => sub {
@@ -47,7 +46,7 @@ use Test::Fatal;
             quux => { isa => 'Str' },
         );
 
-        $params{quux}, $self->$orig(%p);
+        return ( $params{quux}, $self->$orig(%p) );
     };
 }
 

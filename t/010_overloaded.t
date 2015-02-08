@@ -1,6 +1,8 @@
-use Test::More;
+## no critic (Moose::RequireCleanNamespace, Modules::ProhibitMultiplePackages, Moose::RequireMakeImmutable)
 use strict;
 use warnings;
+
+use Test::More;
 
 {
     package Foo;
@@ -32,7 +34,7 @@ use warnings;
             = $args{padded}
             ? join(
             '.',
-            map { sprintf( "%04d", $_ ) } split( /\./, $self->id )
+            map { sprintf( '%04d', $_ ) } split( /\./, $self->id )
             )
             : $self->id;
 
